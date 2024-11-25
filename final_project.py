@@ -46,7 +46,7 @@ def repl():
    wearing, wear_types = phase_one()
    if wearing == None and wear_types == None:
       return
-   phase_two()
+   phase_two(wearing, wear_types)
 
 
   
@@ -54,20 +54,22 @@ def phase_one():
 
    rooms = {"start":[], 
             "lobby":[], 
-            "tops":[("pink off shoulder", 2, "top"), ("green floral blouse", 2, "top"), ("leather crop top", 2, "top"), ("formal white shirt", 2, "top"), ("orange tank", 2, "top"), ("oversized cream sweater", 2, "top")], 
-            "bottoms":[("maroon bell bottoms", 2, "bottom"), ("black cargos", 2, "bottom"), ("skinny jeans", 2, "bottom"), ("purple leggings", 2, "bottom"), ("red plaid skirt", 2, "bottom"), ("leopard print skirt", 2, "bottom"), ("grey pencil skirt", 3, "bottom")], 
-            "dresses":[("silver sequin dress", 2, "dress"), ("cream sundress", 2, "dress"), ("black bodycon", 2, "dress"), ("yellow ballgown", 2, "dress"), ("polka dot a-line", 2, "dress")], 
-            "accessories":[("brown fedora", 2, "accessory"), ("denim bucket hat", 2, "accessory"), ("satin hairbow", 2, "accessory"), ("velvet wristlet", 2, "accessory"), ("pink clutch", 2, "accessory"), ("ivory belt", 2, "accessory")],
-            "jewelry":[("gold hoops", 2, "jewelry"), ("leather choker", 2, "jewelry"), ("silver rings", 2, "jewelry"), ("rose gold chain", 2, "jewelry"), ("diamond studs", 2, "jewelry"), ("rainbow loom bracelet", 2, "jewelry")],
-            "shoes":[("red stilettos", 2, "shoe"), ("beige sandals", 2, "shoe"), ("chunky sneakers", 2, "shoe"), ("black combat boots", 2, "shoe"), ("translucent crocs", 2, "shoe"), ("blue flip flops", 2, "shoe")]}
+            "tops":[("pink off shoulder", 2, "top", 4), ("green floral blouse", 2, "top", 2), ("leather crop top", 2, "top", 5), ("formal white shirt", 2, "top", 5), ("orange tank", 2, "top", 1), ("oversized cream sweater", 2, "top", 4)], 
+            "bottoms":[("maroon bell bottoms", 2, "bottom", 3), ("black cargos", 2, "bottom", 5), ("skinny jeans", 2, "bottom", 1), ("purple leggings", 2, "bottom", 2), ("red plaid skirt", 2, "bottom", 4), ("leopard print skirt", 2, "bottom", 3), ("grey pencil skirt", 3, "bottom", 5)], 
+            "dresses":[("silver sequin dress", 2, "dress", 2), ("cream sundress", 2, "dress", 4), ("black bodycon", 2, "dress", 5), ("yellow ballgown", 2, "dress", 2), ("polka dot a-line", 2, "dress", 1)], 
+            "accessories":[("brown fedora", 2, "accessory", 2), ("denim bucket hat", 2, "accessory", 3), ("satin hairbow", 2, "accessory", 4), ("velvet wristlet", 2, "accessory", 3), ("pink clutch", 2, "accessory", 2), ("ivory belt", 2, "accessory", 2)],
+            "jewelry":[("gold hoops", 2, "jewelry", 5), ("leather choker", 2, "jewelry", 1), ("silver rings", 2, "jewelry", 5), ("rose gold chain", 2, "jewelry", 4), ("diamond studs", 2, "jewelry", 4), ("rainbow loom bracelet", 2, "jewelry", 1)],
+            "shoes":[("red stilettos", 2, "shoe", 3), ("beige sandals", 2, "shoe", 2), ("chunky sneakers", 2, "shoe", 4), ("black combat boots", 2, "shoe", 3), ("translucent crocs", 2, "shoe", 1), ("blue flip flops", 2, "shoe", 1)]}
+
    wearing = []
    wear_types = []
    carrying = []
    curr_room = "start"
 
    enter_re = re.compile(r'^enter (start|lobby|tops|bottoms|dresses|accessories|jewelry|shoes)$') 
-   view_re = re.compile(r'^view (room|inventory|outfit)$') 
-   wear_re = re.compile(r'^wear ([0-9]+)$') 
+   view_re = re.compile(r'^view (room|inventory|outfit|map)$') 
+   puton_re = re.compile(r'^put on ([0-2])$') 
+   wear_re = re.compile(r'^wear ([0-9]+)$')
    remove_re = re.compile(r'^remove ([0-9]+)$')
    carry_re = re.compile(r'^carry ([0-9]+)$')
    drop_re = re.compile(r'^drop ([0-9]+)$')
@@ -77,8 +79,6 @@ def phase_one():
 
    start = time.time()
    while (time.time() - start < 360):  # pretty sure this works (just change to 360 for 6 minutes)
-      if time.time() - start == 60:
-         print("\n. ݁₊ ⊹ less than a minute left! ݁˖ . ݁")
       r = random.randint(0,5)
       prompt = ""
       print("\n")
@@ -97,6 +97,7 @@ def phase_one():
       a = (input(prompt)).strip()
       enter_matched = enter_re.match(a)
       view_matched = view_re.match(a)
+      puton_matched = puton_re.match(a)
       wear_matched = wear_re.match(a)
       remove_matched = remove_re.match(a)
       carry_matched = carry_re.match(a)
@@ -161,17 +162,64 @@ def phase_one():
             for item in carrying:
                print(str(counter) + ") " + item[0])
                counter += 1
-         else:
+         elif thing == "outfit":
             counter = 0
             for item in wearing:
                print(str(counter) + ") " + item[0])
                counter += 1
-      elif wear_matched:        
-         num = int(wear_matched.group(1))
+         else:
+            map = '''                        -------------------------------------       
+                        |                |                  |        
+                        |                \\                  |         
+                        |                 |                 |       
+                         \\     tops       |     bottoms     |       
+                         |                                  |       
+                         |              <--->               |       
+                         |      ^         |                 |       
+               |--------------- | --------|--------\\        |       
+               |        |       v         |         --------|       
+               |        |                 |                 |       
+               |                                            |       
+               | start <-->   lobby     <-->    dresses     |       
+               |                                            |       
+               |        |                 |                 |       
+               |        |       ^         |         --------|       
+               |--------------- | --------|--------/        |       
+                        |       v         |                 |       
+                        |                 |                 |       
+                        |   accessories <--->   jewelry     |       
+                        |                 |                 |       
+                        |                 |                 |       
+                        ---\\    ^     /----------------------       
+                        |   --- | ----   |                          
+                        |       v        |                          
+                        |                |                          
+                        |     shoes      |                          
+                        |                |                          
+                        |                |                          
+                        ------------------                          '''
+            print(map)
+      elif puton_matched:        
+         num = int(puton_matched.group(1))
          if len(carrying) <= num:
-            print("u gotta carry something before u can wear it")
+            print("u gotta carry something before u can put it on")
          else:
             cloth = carrying.pop(num)
+            cloth_type = cloth[2]
+            if cloth_type in wear_types:
+               for i in range(0, len(wearing)):
+                  if (wearing[i])[2] == cloth_type:
+                     items_in_room.append(wearing[i])
+                     wearing[i] = cloth
+            else:
+               wearing.append(cloth)
+               wear_types.append(cloth_type)
+      elif wear_matched:        
+         num = int(wear_matched.group(1))
+         if len(items_in_room) <= num:
+            print("u can't wear something that's not in the room")
+         else:
+            cloth = items_in_room.pop(num)
             cloth_type = cloth[2]
             if cloth_type in wear_types:
                for i in range(0, len(wearing)):
@@ -207,27 +255,200 @@ def phase_one():
             cloth = carrying.pop(num)
             items_in_room.append(cloth)
       elif edit_matched:
-         return
+         num = int(edit_matched.group(2))
+         if len(carrying) <= num:
+            print("u can't " + edit_matched.group(1) + " something ur not carrying")
+         else:
+            (carrying[num])[1] -= 1
       elif quit_matched:
          print("\n. ݁₊ ⊹ terminated ݁˖ . ݁")
          return None, None
       elif done_matched:
-         print("\n. ݁₊ ⊹ PHASE ONE COMPLETE ݁˖ . ݁")
+         print("\n. ݁₊ ⊹ PHASE ONE COMPLETE ݁˖ . ݁\n")
          return wearing, wear_types
       else:
          print("give an actual action pls ")
 
-            
-         
-         
-   print("\n. ݁₊ ⊹ PHASE ONE COMPLETE ݁˖ . ݁")
+   print(". ݁₊ ⊹ times up! ݁˖ . ݁")
+   print("\n. ݁₊ ⊹ PHASE ONE COMPLETE ݁˖ . ݁\n")
    return wearing, wear_types
 
 
 
+def phase_two(wearing, wear_types):
+   if (("top" not in wear_types or "bottom" not in wear_types) and ("dress" not in wear_types)):
+      print("pls, we wanted a bad outfit not no outfit...\n")
+      print("★★★★★\n")
+   else:
 
-def phase_two():
-    pass
+      print("time to channel ur inner model")
+      a = (input("select a runway pose (enter an integer from 0 to 5): ")).strip()
+      while (a != "0" and a != "1" and a != "2" and a != "3" and a != "4" and a != "5"):
+         if a == "quit":
+            print(". ݁₊ ⊹ terminated ݁˖ . ݁")
+            return
+         a = (input("por favor, an integer from 0 to 5: ")).strip()
 
+      if a == "0":
+         pose = '''          
+   +-------+
+   |       |
+   |       |
+   |       |
+   +-------+
+       |
+     /-|-\\
+  /--  |  --\\
+--     |     --
+---\\   |   /---
+    ---|---
+       |
+      / \\
+     /   \\
+    /     \\
+   /       \\
+  /         \\
+ -           -
+'''
+         print(pose)
+         print("oh u hit that 28... but let's see how u did: ")
+
+      elif a == "1":
+         pose = '''
+       +-------+
+       |       |
+     - |       |
+   -/  |       |
+   --  +-------+
+     \\---  |
+         \\-|-\\
+           |  --\\
+           |     --
+           |   /---
+           |---
+           |
+          | |
+          / \\
+         |   |
+         /   \\
+        |     |
+        |     |
+'''
+         print(pose)
+         print("ok i see u baddie... now onto judging: ")
+
+      elif a == "2":
+         pose = '''
+     |     |
+     |     |
+      \\   /
+      |   |
+       \\ /
+       | |
+        |
+        |
+        |
+        |
+        |
+    /---|---\\
+----    |    ----
+|   +-------+   |
+|   |       |   |
+|   |       |   |
+|   |       |   |
+|   +-------+   |
+'''
+         print(pose)
+         print("woah headstand slay... but its the outfit that matters: ")
+
+      elif a == "3":
+         pose = '''
+          +-------+
+          |       |
+          |       |
+          |       |
+          +-------+
+              |
+            /-|-\\
+         /--  |  --\\
+       --     |     --
+              |
+              |
+-------------   --------------
+'''
+
+         print(pose)
+         print("the splits?!?!?!... let's see the fit tho: ")
+
+      elif a == "4":
+         pose = '''
+  +-------+
+  |       |
+  |       |
+  |       |
+  +-------+
+      |
+     /|-\\
+    | |  --\\
+    / |     --
+   /  |   /---
+  |   |---
+--    |
+     | |
+     / \\
+    |   |
+    /   \\
+   |     |
+   |     |
+'''
+
+         print(pose)
+         print("ok highkey ate... but did the outfit eat: ")
+
+      elif a == "5":
+         pose = '''
+  +-------+
+  |       |
+  |       |
+  |       |
+  +-------+
+      |
+     /|\\
+    | | |
+    / | \\
+   /  |  \\
+  |   |   |
+--    |    --
+     | \\
+     |  \\
+     |   \\
+     |    \\
+     |     \\
+     |      -
+'''
+
+         print(pose)
+         print("my queen... who is about to be judged: ")
+      
+      print("")
+      count = 0
+      for item in wearing:
+         count += item[3]
+      count /= len(wear_types)
+      count = round(count)
+      if count <= 0:
+         count = 1
+      elif count >= 6:
+         count = 5
+      
+      for i in range(count):
+         print("★", end = "")
+      for i in range(5 - count):
+         print("☆", end = "")
+
+      print("")
+      print("\n. ݁₊ ⊹ PHASE TWO COMPLETE ݁˖ . ݁")
+
+      return
 
 repl()
