@@ -47,6 +47,8 @@ def repl():
    if wearing == None and wear_types == None:
       return
    phase_two(wearing, wear_types)
+   print("")
+   print("\n. ݁₊ ⊹ YIPPEE, THANKS FOR PLAYING ݁˖ . ݁")
 
 
   
@@ -429,6 +431,14 @@ def phase_two(wearing, wear_types):
 
          print(pose)
          print("my queen... who is about to be judged: ")
+
+      time.sleep(2)
+      print("\nprocessing fit...")
+      time.sleep(2)
+      print("\nanalyzing slay...")
+      time.sleep(2)
+      print("\nthis is distressing...")
+      time.sleep(2)
       
       print("")
       count = 0
@@ -445,9 +455,6 @@ def phase_two(wearing, wear_types):
          print("★", end = "")
       for i in range(5 - count):
          print("☆", end = "")
-
-      print("")
-      print("\n. ݁₊ ⊹ PHASE TWO COMPLETE ݁˖ . ݁")
 
       return
 
