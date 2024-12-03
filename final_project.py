@@ -94,10 +94,10 @@ def phase_one():
    # starter variables
    rooms = {"start":[], 
             "lobby":[], 
-            "tops":[["pink off shoulder", 2, "top", 4], ["green floral blouse", 2, "top", 2], ["leather crop top", 2, "top", 5], ["formal white shirt", 2, "top", 5], ["orange tank", 2, "top", 1], ["oversized cream sweater", 2, "top", 4]], 
-            "bottoms":[["maroon bell bottoms", 2, "bottom", 3], ["black cargos", 2, "bottom", 5], ["skinny jeans", 2, "bottom", 1], ["purple leggings", 2, "bottom", 2], ["red plaid skirt", 2, "bottom", 4], ["leopard print skirt", 2, "bottom", 3], ["grey pencil skirt", 3, "bottom", 5]], 
-            "dresses":[["silver sequin dress", 2, "dress", 2], ["cream sundress", 2, "dress", 4], ["black bodycon", 2, "dress", 5], ["yellow ballgown", 2, "dress", 2], ["polka dot a-line", 2, "dress", 1]], 
-            "accessories":[["brown fedora", 2, "accessory", 2], ["denim bucket hat", 2, "accessory", 3], ["satin hairbow", 2, "accessory", 4], ["velvet wristlet", 2, "accessory", 3], ["pink clutch", 2, "accessory", 2], ["ivory belt", 2, "accessory", 2]],
+            "tops":[["pink off shoulder", 2, "top", 4], ["green floral blouse", 2, "top", 1], ["leather crop top", 2, "top", 5], ["formal white shirt", 2, "top", 5], ["orange tank", 2, "top", 1], ["oversized cream sweater", 2, "top", 4]], 
+            "bottoms":[["maroon bell bottoms", 2, "bottom", 3], ["black cargos", 2, "bottom", 5], ["skinny jeans", 2, "bottom", 1], ["purple leggings", 2, "bottom", 2], ["red plaid skirt", 2, "bottom", 4], ["leopard print skirt", 2, "bottom", 1], ["grey pencil skirt", 3, "bottom", 5]], 
+            "dresses":[["silver sequin dress", 2, "dress", 2], ["cream sundress", 2, "dress", 5], ["black bodycon", 2, "dress", 5], ["yellow ballgown", 2, "dress", 2], ["polka dot a-line", 2, "dress", 1]], 
+            "accessories":[["brown fedora", 2, "accessory", 2], ["denim bucket hat", 2, "accessory", 3], ["satin hairbow", 2, "accessory", 5W], ["velvet wristlet", 2, "accessory", 3], ["pink clutch", 2, "accessory", 2], ["ivory belt", 2, "accessory", 2]],
             "jewelry":[["gold hoops", 2, "jewelry", 5], ["leather choker", 2, "jewelry", 1], ["silver rings", 2, "jewelry", 5], ["rose gold chain", 2, "jewelry", 4], ["diamond studs", 2, "jewelry", 4], ["rainbow loom bracelet", 2, "jewelry", 1]],
             "shoes":[["red stilettos", 2, "shoe", 3], ["beige sandals", 2, "shoe", 2], ["chunky sneakers", 2, "shoe", 4], ["black combat boots", 2, "shoe", 3], ["translucent crocs", 2, "shoe", 1], ["blue flip flops", 2, "shoe", 1]]}
    
