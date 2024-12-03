@@ -280,7 +280,7 @@ def phase_one():
       elif puton_matched: # wearing something from the inventory
 
          num = int(puton_matched.group(1)) - 1
-         if len(carrying) <= num:
+         if len(carrying) <= num or num < 0:
             print("u gotta carry something before u can put it on")
          else:
             cloth = carrying.pop(num)
@@ -297,7 +297,7 @@ def phase_one():
       elif wear_matched: # wearing something from the room
 
          num = int(wear_matched.group(1)) - 1
-         if len(items_in_room) <= num:
+         if len(items_in_room) <= num or num < 0:
             print("u can't wear something that's not in the room")
          else:
             cloth = items_in_room.pop(num)
@@ -314,7 +314,7 @@ def phase_one():
       elif remove_matched: # removing something from the outfit
 
          num = int(remove_matched.group(1)) - 1
-         if len(wearing) <= num:
+         if len(wearing) <= num or num < 0:
             print("u can't remove something ur not wearing")
          else:
             cloth = wearing.pop(num)
@@ -325,7 +325,7 @@ def phase_one():
       elif carry_matched: # carrying something from the room
 
          num = int(carry_matched.group(1)) - 1
-         if len(items_in_room) <= num:
+         if len(items_in_room) <= num or num < 0:
             print("girl u can't carry something that doesn't exist")
          elif len(carrying) >= 3:
             print("u can't carry that much...")
@@ -336,7 +336,7 @@ def phase_one():
       elif drop_matched: # dropping something from the inventory 
 
          num = int(drop_matched.group(1)) - 1
-         if len(carrying) <= num:
+         if len(carrying) <= num or num < 0:
             print("u can't drop something ur not carrying")
          else:
             cloth = carrying.pop(num)
@@ -345,7 +345,7 @@ def phase_one():
       elif edit_matched: # ripping/tearing/stretching something from the inventory
 
          num = int(edit_matched.group(2)) - 1
-         if len(carrying) <= num:
+         if len(carrying) <= num or num < 0:
             print("u can't " + edit_matched.group(1) + " something ur not carrying")
          else:
             perc = ((carrying[num])[1])
@@ -536,6 +536,7 @@ def phase_two(wearing, wear_types):
       print("\nthis is distressing...")
       time.sleep(2)
       
+      # autograding
       print("")
       count = 0
       for item in wearing:
